@@ -7,6 +7,7 @@
 //
 
 #import <DJIUXSDK/DJIUXSDK.h>
+#import "CoreLocation/CoreLocation.h"
 
 @interface DefaultLayoutViewController : DUXDefaultLayoutViewController
 

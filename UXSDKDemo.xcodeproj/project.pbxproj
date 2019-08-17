@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		190A4ECD22F2C83400DFEB29 /* arrowMark_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 190A4ECC22F2C83400DFEB29 /* arrowMark_line.png */; };
+		190A4ECF22F465B500DFEB29 /* arrowMark.png in Resources */ = {isa = PBXBuildFile; fileRef = 190A4ECE22F465B400DFEB29 /* arrowMark.png */; };
+		19BC9C4F2283C92D0041E309 /* forSocketSwiftFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19BC9C4E2283C92D0041E309 /* forSocketSwiftFile.swift */; };
+		19BC9C51228E69690041E309 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19BC9C50228E69680041E309 /* CoreLocation.framework */; };
 		A452DC652070DCFC00EFBA30 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A452DC5A2070DCFC00EFBA30 /* AppDelegate.m */; };
 		A452DC662070DCFC00EFBA30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A452DC5B2070DCFC00EFBA30 /* Assets.xcassets */; };
 		A452DC672070DCFC00EFBA30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A452DC5C2070DCFC00EFBA30 /* LaunchScreen.storyboard */; };
@@ -31,6 +35,11 @@
 
 /* Begin PBXFileReference section */
 		16373B93F3B2A7A34B129AF2 /* Pods-UXSDKDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UXSDKDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UXSDKDemo/Pods-UXSDKDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		190A4ECC22F2C83400DFEB29 /* arrowMark_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowMark_line.png; sourceTree = "<group>"; };
+		190A4ECE22F465B400DFEB29 /* arrowMark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowMark.png; sourceTree = "<group>"; };
+		19BC9C4D2283C92C0041E309 /* UXSDKDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UXSDKDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		19BC9C4E2283C92D0041E309 /* forSocketSwiftFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = forSocketSwiftFile.swift; sourceTree = "<group>"; };
+		19BC9C50228E69680041E309 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		8509A3A7F523BFAB6D92D3F0 /* Pods_UXSDKDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UXSDKDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A452DC592070DCFC00EFBA30 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A452DC5A2070DCFC00EFBA30 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -50,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19BC9C51228E69690041E309 /* CoreLocation.framework in Frameworks */,
 				D92DBBDBAD7B2D1C00AD8260 /* Pods_UXSDKDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,6 +79,7 @@
 		26FD7018B7700DA45E0BD5F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				19BC9C50228E69680041E309 /* CoreLocation.framework */,
 				8509A3A7F523BFAB6D92D3F0 /* Pods_UXSDKDemo.framework */,
 			);
 			name = Frameworks;
@@ -80,13 +91,17 @@
 				A452DC592070DCFC00EFBA30 /* AppDelegate.h */,
 				A452DC5A2070DCFC00EFBA30 /* AppDelegate.m */,
 				A452DC5B2070DCFC00EFBA30 /* Assets.xcassets */,
+				190A4ECE22F465B400DFEB29 /* arrowMark.png */,
 				A452DC5C2070DCFC00EFBA30 /* LaunchScreen.storyboard */,
 				A452DC5E2070DCFC00EFBA30 /* Main.storyboard */,
 				A452DC602070DCFC00EFBA30 /* DefaultLayoutViewController.h */,
 				A452DC612070DCFC00EFBA30 /* DefaultLayoutViewController.m */,
 				A452DC622070DCFC00EFBA30 /* Info.plist */,
 				A452DC632070DCFC00EFBA30 /* main.m */,
+				190A4ECC22F2C83400DFEB29 /* arrowMark_line.png */,
 				A452DC642070DCFC00EFBA30 /* xibs */,
+				19BC9C4E2283C92D0041E309 /* forSocketSwiftFile.swift */,
+				19BC9C4D2283C92C0041E309 /* UXSDKDemo-Bridging-Header.h */,
 			);
 			path = UXSDKDemo;
 			sourceTree = "<group>";
@@ -128,7 +143,6 @@
 				A48847C21EA2697F00CE5843 /* Frameworks */,
 				A48847C31EA2697F00CE5843 /* Resources */,
 				B67F77260A1CB8541637B104 /* [CP] Embed Pods Frameworks */,
-				A05A9B2EAF8E7AA92BB852FD /* [CP] Copy Pods Resources */,
 				A48847EA1EA26AFF00CE5843 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -151,7 +165,8 @@
 				TargetAttributes = {
 					A48847C41EA2697F00CE5843 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = 7UL3LRJL93;
+						DevelopmentTeam = 7W9XLA76UD;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -181,7 +196,9 @@
 			files = (
 				A452DC682070DCFC00EFBA30 /* Main.storyboard in Resources */,
 				A452DC662070DCFC00EFBA30 /* Assets.xcassets in Resources */,
+				190A4ECD22F2C83400DFEB29 /* arrowMark_line.png in Resources */,
 				A452DC672070DCFC00EFBA30 /* LaunchScreen.storyboard in Resources */,
+				190A4ECF22F465B500DFEB29 /* arrowMark.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,28 +211,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-UXSDKDemo-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		A05A9B2EAF8E7AA92BB852FD /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-UXSDKDemo/Pods-UXSDKDemo-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B67F77260A1CB8541637B104 /* [CP] Embed Pods Frameworks */ = {
@@ -224,13 +229,26 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-UXSDKDemo/Pods-UXSDKDemo-frameworks.sh",
+				"${PODS_ROOT}/DJI-SDK-iOS/iOS_Mobile_SDK/DJISDK.framework",
+				"${PODS_ROOT}/DJI-UXSDK-iOS/iOS_UXSDK/DJIUXSDK.framework",
+				"${PODS_ROOT}/DJIWidget/FFmpeg/FFmpeg.framework",
+				"${BUILT_PRODUCTS_DIR}/DJIWidget/DJIWidget.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DJISDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DJIUXSDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FFmpeg.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DJIWidget.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-UXSDKDemo/Pods-UXSDKDemo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-UXSDKDemo/Pods-UXSDKDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -240,6 +258,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19BC9C4F2283C92D0041E309 /* forSocketSwiftFile.swift in Sources */,
 				A452DC692070DCFC00EFBA30 /* DefaultLayoutViewController.m in Sources */,
 				A452DC6B2070DCFC00EFBA30 /* main.m in Sources */,
 				A452DC652070DCFC00EFBA30 /* AppDelegate.m in Sources */,
@@ -365,7 +384,8 @@
 			baseConfigurationReference = 16373B93F3B2A7A34B129AF2 /* Pods-UXSDKDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 7UL3LRJL93;
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 7W9XLA76UD;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -382,8 +402,11 @@
 					"-framework",
 					"\"DJIUXSDK\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dji.UXSDKDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kiyuki.tppUXSDK2019;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "UXSDKDemo/UXSDKDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -393,7 +416,8 @@
 			baseConfigurationReference = EB16A4C55C695EDAF8E55327 /* Pods-UXSDKDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 7UL3LRJL93;
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 7W9XLA76UD;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -410,8 +434,10 @@
 					"-framework",
 					"\"DJIUXSDK\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dji.UXSDKDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kiyuki.tppUXSDK2019;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "UXSDKDemo/UXSDKDemo-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

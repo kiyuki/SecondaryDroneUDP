@@ -24,8 +24,8 @@
 @property NSURL* url;
 @property SocketManager* manager;
 @property SocketIOClient* socket;
-@property (atomic) NSMutableDictionary* sdInfoBuff;
-@property (atomic) NSMutableDictionary* socketSig;
+@property NSMutableDictionary* fPosiBuffStub;
+@property NSMutableDictionary* socketSig;
 @property int socketNum;
 
 @property BOOL SDFlying;
@@ -44,34 +44,44 @@
 @property (weak, nonatomic) IBOutlet UISlider *sliderBarForTes;
 @property (weak, nonatomic) IBOutlet UIButton *setControllerModeButton;
 @property (weak, nonatomic) IBOutlet UIButton *stubSDSoc;
-@property (weak, nonatomic) IBOutlet UIImageView *arrowImage;
+@property int tes;
+@property int* tes2;
 
-
-@property (atomic) double latSpeed;
-@property (atomic) double lonSpeed;
+@property float PContValue;
+@property CLLocationCoordinate2D targetPosi;
 @property (atomic) double targetAlt;
 @property (atomic) double targetYaw;
-@property (atomic) double gyroZ;
 
-@property CATransform3D pitchTrans;
-@property CATransform3D yawTrans;
+@property CLLocationCoordinate2D SDPosiCurrent;
+@property (atomic) double SDAltCurrent;
+@property (atomic) double SDYawCurrent;
 
-@property (atomic) CLLocation* sdLocation;
-@property (atomic) double SDAlt;
-@property (atomic) double flightTime;
 @property (atomic) double gimbalAngle;
+/*
+@property CLLocationCoordinate2D SDPosiPrevious;
+@property double SDAltPrevious;
+@property double SDYawPrevious;
+ 
+@property (atomic) CLLocationCoordinate2D PDPosi;
+@property (atomic) double PDAltCurrent;
+
+@property (atomic) float lastLatError;
+@property (atomic) float lastLonError;
+@property (atomic) float latDiffError;
+@property (atomic) float lonDiffError;
+*/
 
 - (IBAction)sliderBarForGimbal:(UISlider *)sender;
 - (IBAction)autoOperateSwitch:(UISwitch *)sender;
 - (IBAction)showInfoLabel:(UISwitch *)sender;
 - (IBAction)setControllerMode:(UIButton *)sender;
 - (IBAction)stubPD:(id)sender;
-- (IBAction)sliderBar2:(UISlider *)sender;
 
-@property (atomic) float sliderValue2;
 @end
 
 @implementation DefaultLayoutViewController
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -79,31 +89,24 @@
     [DJISDKManager registerAppWithDelegate:self];
     [NSTimer scheduledTimerWithTimeInterval:0.03f target:self selector:@selector(Vmethod:) userInfo:nil repeats:YES];
     [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(Tmethod:) userInfo:nil repeats:YES];
-    [NSTimer scheduledTimerWithTimeInterval:0.3f target:self selector:@selector(Tmethod2:) userInfo:nil repeats:YES];
     self.url = [[NSURL alloc] initWithString:@"http://192.168.100.154:5000"];
     self.manager = [[SocketManager alloc] initWithSocketURL:self.url config:@{@"log": @YES, @"compress": @YES}];
     self.socket = self.manager.defaultSocket;
 
-    UIImage *image = [UIImage imageNamed:@"arrowMark_line.png"];
-   //  self.arrowImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrowMark.png"]];
-    self.arrowImage.image = image;
-    [self.view addSubview:self.arrowImage];
-    [self.view bringSubviewToFront:self.arrowImage];
-    
     [self.socket on:@"connect" callback:^(NSArray* data, SocketAckEmitter* ack) {
         NSLog(@"socket connected");
     }];
-    [self.socket on:@"v2Cont" callback:^(NSArray * data, SocketAckEmitter * ack) {
-        self.latSpeed = [[data[0] objectForKey:@"latSpeed"] doubleValue];
-        self.lonSpeed = [[data[0] objectForKey:@"lonSpeed"] doubleValue];
-        self.targetAlt = [[data[0] objectForKey:@"alt"] doubleValue];
-        self.targetYaw = [[data[0] objectForKey:@"yaw"] doubleValue];
-        self.gimbalAngle = [[data[0] objectForKey:@"gimbalAngle"] doubleValue];
-        self.gyroZ = [[data[0] objectForKey:@"gyroZ"] doubleValue];
-        NSLog(@"latSpeed, lonSpeed, alt, yaw: %f, %f, %f, %f %f", self.latSpeed, self.lonSpeed, self.targetAlt, self.targetYaw, self.gimbalAngle);
-    }];
-    self.SDAlt = 6;
+    self.targetAlt = 0;
+    self.targetYaw = 0;
+    self.targetPosi= CLLocationCoordinate2DMake(0, 0);
+    self.gimbalAngle = 0;
+    self.socketNum = 0;
     /*
+    [self.socket on:@"v2Posi" callback:^(NSArray * data, SocketAckEmitter * ack) {
+        self.targetPosi= CLLocationCoordinate2DMake([[data[0] objectForKey:@"lat"] doubleValue], [[data[0] objectForKey:@"lon"] doubleValue]);
+        self.targetAlt = [[data[0] objectForKey:@"alt"] doubleValue];
+    }];
+    
     [self.socket on:@"v2Posture" callback:^(NSArray * data, SocketAckEmitter * ack) {
         float v1Lat;
         float v1Lon;
@@ -116,15 +119,22 @@
         }
         self.distanceBtDrone = [[data[0] objectForKey:@"dist"] doubleValue];
     }];
+    [self.socket on:@"PDinfo" callback:^(NSArray * data, SocketAckEmitter * ack) {
+        self.PDAltCurrent = [[data[0] objectForKey:@"alt"] doubleValue];
+        NSLog(@"distace !! -- %lf", self.distanceBtDrone);
+    }];
      */
-
-    self.targetAlt = 0;
-    self.targetYaw = 0;
-    self.gimbalAngle = 0;
-    self.socketNum = 0;
-    
     [self.socket connect];
-    self.sdInfoBuff = [NSMutableDictionary dictionary];
+    self.fPosiBuffStub = [NSMutableDictionary dictionary];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:38.2466255] forKey:@"lat"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:140.8710816] forKey:@"lon"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:1.0] forKey:@"alt"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0.0] forKey:@"yaw"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0.0] forKey:@"pitch"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0.0] forKey:@"roll"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0.0] forKey:@"velX"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0.0] forKey:@"velY"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0.0] forKey:@"velZ"];
     self.socketSig = [NSMutableDictionary dictionary];
     [self.socketSig setObject:[NSNumber numberWithInt:self.socketNum] forKey:@"SDSocketNum"];
 }
@@ -183,40 +193,39 @@
 }
 
 - (void) flightController:(DJIFlightController *)fc didUpdateState:(DJIFlightControllerState *)state{
-    self.sdLocation = state.aircraftLocation;
-    self.SDAlt = state.altitude;
     self.SDFlying = state.isFlying;
-    self.flightTime = state.flightTimeInSeconds;
+    self.SDPosiCurrent = CLLocationCoordinate2DMake(state.aircraftLocation.coordinate.latitude, state.aircraftLocation.coordinate.longitude);
+    self.SDAltCurrent = state.altitude;
+    if(state.flightMode == DJIFlightModeGoHome){
+        self.goHomeF = true;
+    }else{
+        self.goHomeF = false;
+    }
 }
 
 
 - (void)Vmethod:(NSTimer *)timer
 {
     // [self.socket emit:@"v1params" with:[NSArray arrayWithObject:self.fPosiBuffStub]];
-    [self.sdInfoBuff setObject:[NSNumber numberWithDouble:self.sdLocation.coordinate.latitude] forKey:@"lat"];
-    [self.sdInfoBuff setObject:[NSNumber numberWithDouble:self.sdLocation.coordinate.longitude] forKey:@"lon"];
-    [self.sdInfoBuff setObject:[NSNumber numberWithDouble:self.SDAlt] forKey:@"alt"];
-    [self.sdInfoBuff setObject:[NSNumber numberWithDouble:self.flightTime] forKey:@"flightTime"];
-    [self.socket emit:@"v2params" with:[NSArray arrayWithObject:self.sdInfoBuff]];
-    self.label2.text = [NSString stringWithFormat:@"latSpeed, %f", self.latSpeed];
-    self.label3.text = [NSString stringWithFormat:@"lonSpeed, %f", self.lonSpeed];
-    self.label4.text = [NSString stringWithFormat:@"lat, %f", self.sdLocation.coordinate.latitude];
-    self.label5.text = [NSString stringWithFormat:@"lon, %f", self.sdLocation.coordinate.longitude];
     if(self.autoSwitchStateBoo){
         self.label1.text = @"on";
         [self culcuControlData];
         [self.flightController sendVirtualStickFlightControlData:self.controlData withCompletion:^(NSError * _Nullable error) {
         }];
-     //    [self culcuGimbalRotation];
-        // self.rotationData = [DJIGimbalRotation gimbalRotationWithPitchValue:[NSNumber numberWithDouble:-self.gimbalAngle] rollValue:0 yawValue:0 time:0.2 mode:DJIGimbalRotationModeAbsoluteAngle];
-        self.rotationData = [DJIGimbalRotation gimbalRotationWithPitchValue:[NSNumber numberWithFloat:-self.sliderValue] rollValue:0 yawValue:0 time:0.2 mode:DJIGimbalRotationModeAbsoluteAngle];
+        [self culcuGimbalRotation];
         [self.djiGimbal rotateWithRotation:self.rotationData completion:^(NSError * _Nullable error) {
         }];
         self.label9.text = [NSString stringWithFormat:@"targetAlt: %lf", self.targetAlt];
-        self.label6.text = [NSString stringWithFormat:@"gimbal Angle: %lf", self.gimbalAngle];
     }else{
         self.label1.text = @"off";
     }
+    
+    /*
+    self.label5.text = [NSString stringWithFormat:@"verticalThrottle: %lf", self.controlData.verticalThrottle];
+    self.label6.text = [NSString stringWithFormat:@"control Yaw: %lf", self.controlData.yaw];
+    self.label7.text = [NSString stringWithFormat:@"targetLat: %lf", self.targetPosi.latitude];
+    self.label8.text = [NSString stringWithFormat:@"targetLon: %lf", self.targetPosi.longitude];
+     */
 }
      
 
@@ -227,8 +236,6 @@
 -(void) culcuGimbalRotation{
      // self.gimbalAngle = -(atan((self.SDAltCurrent - self.PDAltCurrent )/ self.distanceBtDrone)* 0.5 * M_1_PI * 360);
      self.rotationData = [DJIGimbalRotation gimbalRotationWithPitchValue:[NSNumber numberWithDouble:self.gimbalAngle] rollValue:0 yawValue:0 time:0.2 mode:DJIGimbalRotationModeAbsoluteAngle];
-    // self.rotationData = [DJIGimbalRotation gimbalRotationWithPitchValue:[NSNumber numberWithFloat:self.sliderValue] rollValue:0 yawValue:0 time:0.2 mode:DJIGimbalRotationModeAbsoluteAngle];
-    
 }
 
 - (IBAction)sliderBarForGimbal:(UISlider *)sender {
@@ -237,11 +244,40 @@
 
 - (void)culcuControlData{
     DJIVirtualStickFlightControlData data;
+    /*
+    float latError;
+    float lonError;
+    float diffLatError;
+    float diffLonError;
+    latError = (float)((self.targetPosi.latitude - self.SDPosiCurrent.latitude)*100000) * self.PContValue;
+    lonError = (float)((self.targetPosi.longitude - self.SDPosiCurrent.longitude)*100000) * self.PContValue;
+    diffLatError = (latError - self.lastLatError) * 3;
+    diffLonError = (lonError - self.lastLonError) * 3;
+
+    data.roll = latError + diffLatError;
+    data.pitch = lonError + diffLonError;
+    if(data.roll >= 15){
+        data.roll = 15;
+    }else if(data.roll <= -15){
+        data.roll = -15;
+    }
+    if(data.pitch >= 15){
+        data.pitch = 15;
+    }else if(data.pitch <= -15){
+        data.pitch = -15;
+    }
+    */
     data.verticalThrottle = self.targetAlt;
     data.yaw = self.targetYaw;
-    data.pitch = self.lonSpeed;
-    data.roll = self.latSpeed;
+    data.pitch = 0;
+    data.roll = 0;
     self.controlData = data;
+    /*
+    self.label1.text = [NSString stringWithFormat:@"pitch value: %f", self.controlData.pitch];
+    self.label2.text = [NSString stringWithFormat:@"roll value: %f", self.controlData.roll];
+    self.label3.text = [NSString stringWithFormat:@"SDPosi lat: %lf", self.SDPosiCurrent.latitude];
+    self.label4.text = [NSString stringWithFormat:@"SDPosi lon: %lf", self.SDPosiCurrent.longitude];
+     */
 }
 
 - (IBAction)autoOperateSwitch:(UISwitch *)sender {
@@ -309,10 +345,16 @@
 }
 
 - (IBAction)stubPD:(id)sender {
-}
-
-- (IBAction)sliderBar2:(UISlider *)sender {
-    self.sliderValue2 = sender.value;
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:38.2466255] forKey:@"lat"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:140.8710816] forKey:@"lon"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:1.0] forKey:@"alt"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0] forKey:@"yaw"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0.0] forKey:@"pitch"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0.0] forKey:@"roll"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0.0] forKey:@"velX"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0.0] forKey:@"velY"];
+    [self.fPosiBuffStub setObject:[NSNumber numberWithDouble:0.0] forKey:@"velZ"];
+    [self.socket emit:@"v1params" with:[NSArray arrayWithObject:self.fPosiBuffStub]];
 }
 
 - (void)flightAssistant:(DJIFlightAssistant *)assistant
@@ -325,30 +367,5 @@ didUpdateVisionDetectionState:(DJIVisionDetectionState *)state{
     [self.socketSig setObject:[NSNumber numberWithFloat:self.socketNum] forKey:@"SDSocketNum"];
     [self.socket emit:@"sdSocket" with:[NSArray arrayWithObject:self.socketSig]];
 }
-
-- (void)Tmethod2:(NSTimer *)timer{
-    /*
-    self.pitchTrans = CATransform3DMakeRotation((90 - self.gimbalAngle) * (M_PI/180),  1, 0, 0);
-    self.yawTrans = CATransform3DMakeRotation(self.gyroZ*(M_PI/180), 0, 0, 1);
-     */
-    self.pitchTrans = CATransform3DMakeRotation(self.sliderValue2 * (M_PI/180),  1, 0, 0);
-    self.yawTrans = CATransform3DMakeRotation(self.sliderValue * (M_PI/180), 0, 0, 1);
-    // self.arrowImage.layer.sublayerTransform
-    self.arrowImage.layer.transform = CATransform3DConcat(self.yawTrans, self.pitchTrans);
-    // self.arrowImage.layer.transform = self.yawTrans;
-   /*
-    
-    CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath:@"transform"];
-    animation.duration = 0.5;
-    animation.repeatCount = 1;
-    animation.autoreverses = YES; //逆方向再生の設定
-    // CATransform3D transform = CATransform3DMakeRotation(M_PI, 0.0, 1.0, 0.0);
-    CATransform3D transform = CATransform3DConcat(self.yawTrans, self.pitchTrans);
-    // transform.m34 = 1.0f / -420.0f;//回転に立体感を出す
-    animation.toValue = [NSNumber valueWithCATransform3D:transform];
-    */
-    // [self.arrowImage.layer addAnimation:animation forKey:@"transform"];
-   // self.arrowImage.layer.transform = CATransform3DConcat(self.yawTrans, self.pitchTrans);
-    NSLog(@"image ok_____________-");
-}
 @end
+
